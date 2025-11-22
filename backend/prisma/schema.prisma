@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ArticleTagMap {
+  articleId  String @map("article_id")
+  tagId      String @map("tag_id")
+  assignedAt DateTime @map("assigned_at") @default(now()) @db.DateTime(0)
+  article    Article @relation(fields: [articleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_tagmap_article")
+  tag        ArticleTag @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_tagmap_tag")
+
+  @@id([articleId, tagId])
+  @@index([tagId], map: "fk_tagmap_tag")
+  @@map("article_tag_map")
+}
+
+model ArticleTag {
+  id        String       @id
+  name      String
+  slug      String       @unique(map: "slug")
+  createdAt DateTime     @map("created_at") @default(now()) @db.DateTime(0)
+  updatedAt DateTime     @map("updated_at") @default(now()) @db.DateTime(0)
+  articles  ArticleTagMap[]
+
+  @@map("article_tags")
+}
+
+model ArticleView {
+  id        String   @id
+  articleId String   @map("article_id")
+  viewDate  DateTime @map("view_date") @db.Date
+  views     Int      @default(0)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_views_article")
+
+  @@unique([articleId, viewDate], map: "uniq_article_view_day")
+  @@map("article_views")
+}
+
+model Article {
+  id             String        @id
+  title          String        @db.VarChar(255)
+  slug           String        @unique(map: "slug") @db.VarChar(255)
+  excerpt        String        @db.Text
+  contentHtml    String        @map("content_html") @db.LongText
+  status         ArticleStatus @default(DRAFT)
+  heroImageUrl   String?       @map("hero_image_url") @db.VarChar(512)
+  publishedAt    DateTime?     @map("published_at") @db.DateTime(0)
+  scheduledAt    DateTime?     @map("scheduled_at") @db.DateTime(0)
+  authorId       String        @map("author_id")
+  categoryId     String        @map("category_id")
+  createdAt      DateTime      @map("created_at") @default(now()) @db.DateTime(0)
+  updatedAt      DateTime      @map("updated_at") @default(now()) @db.DateTime(0)
+  seoTitle       String?       @map("seo_title") @db.VarChar(255)
+  seoDescription String?       @map("seo_description") @db.Text
+  tags           ArticleTagMap[]
+  views          ArticleView[]
+  author         User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_article_author")
+  category       Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_article_category")
+  mediaAssets    MediaAsset[]
+
+  @@map("articles")
+  @@index([authorId], map: "fk_article_author")
+  @@index([categoryId, status], map: "idx_article_category_status")
+  @@index([status, publishedAt], map: "idx_article_status_published")
+}
+
+model Category {
+  id          String    @id
+  name        String
+  slug        String    @unique(map: "slug")
+  color       String?   @db.VarChar(12)
+  description String?   @db.Text
+  sortOrder   Int       @map("sort_order") @default(0)
+  createdAt   DateTime  @map("created_at") @default(now()) @db.DateTime(0)
+  updatedAt   DateTime  @map("updated_at") @default(now()) @db.DateTime(0)
+  articles    Article[]
+
+  @@map("categories")
+}
+
+model MediaAsset {
+  id               String   @id
+  articleId        String?  @map("article_id")
+  url              String   @db.VarChar(512)
+  mimeType         String   @map("mime_type") @db.VarChar(128)
+  originalFilename String   @map("original_filename") @db.VarChar(255)
+  sizeBytes        Int      @map("size_bytes")
+  createdAt        DateTime @map("created_at") @default(now()) @db.DateTime(0)
+  createdById      String?  @map("created_by_id")
+  article          Article? @relation(fields: [articleId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_media_article")
+  createdBy        User?    @relation(fields: [createdById], references: [id], onUpdate: Restrict, map: "fk_media_user")
+
+  @@map("media_assets")
+  @@index([articleId], map: "fk_media_article")
+  @@index([createdById], map: "fk_media_user")
+}
+
+model NewsletterSubscription {
+  id        String   @id
+  email     String   @unique(map: "email")
+  name      String?
+  createdAt DateTime @map("created_at") @default(now()) @db.DateTime(0)
+
+  @@map("newsletter_subscriptions")
+}
+
+model Setting {
+  id        String   @id
+  key       String   @unique(map: "key")
+  value     String   @db.LongText
+  createdAt DateTime @map("created_at") @default(now()) @db.DateTime(0)
+  updatedAt DateTime @map("updated_at") @default(now()) @db.DateTime(0)
+
+  @@map("settings")
+}
+
+model User {
+  id           String        @id
+  name         String
+  email        String        @unique(map: "email")
+  passwordHash String        @map("password_hash")
+  role         UserRole      @default(JOURNALIST)
+  status       UserStatus    @default(ACTIVE)
+  lastLoginAt  DateTime?     @map("last_login_at") @db.DateTime(0)
+  createdAt    DateTime      @map("created_at") @default(now()) @db.DateTime(0)
+  updatedAt    DateTime      @map("updated_at") @default(now()) @db.DateTime(0)
+  articles     Article[]
+  mediaAssets  MediaAsset[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  JOURNALIST
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum UserStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}

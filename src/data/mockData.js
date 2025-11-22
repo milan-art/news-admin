@@ -1,0 +1,158 @@
+export const initialCategories = [
+  {
+    id: 'cat-top',
+    name: 'Top Stories',
+    color: '#3a7dff',
+    description: 'Highlights of the day and editorial picks.',
+  },
+  {
+    id: 'cat-politics',
+    name: 'Politics',
+    color: '#ff6f61',
+    description: 'Policy moves, elections, and governance insights.',
+  },
+  {
+    id: 'cat-sports',
+    name: 'Sports',
+    color: '#35c4a1',
+    description: 'Coverage from analysis to live match highlights.',
+  },
+  {
+    id: 'cat-tech',
+    name: 'Tech',
+    color: '#8c5bff',
+    description: 'Innovation, disruption, and emerging trends.',
+  },
+  {
+    id: 'cat-entertainment',
+    name: 'Entertainment',
+    color: '#ff9f43',
+    description: 'Streaming, film, and culture from around the globe.',
+  },
+]
+
+export const initialNews = [
+  {
+    id: 'n-001',
+    headline: 'Inside the rise of national debate',
+    status: 'published',
+    categoryId: 'cat-top',
+    author: 'Lauren Santos',
+    scheduled: null,
+    views: 28450,
+    tags: ['analysis', 'spotlight'],
+    createdAt: '2025-10-25T08:30:00Z',
+    updatedAt: '2025-10-26T10:15:00Z',
+  },
+  {
+    id: 'n-002',
+    headline: 'What to know about tech disruption',
+    status: 'published',
+    categoryId: 'cat-tech',
+    author: 'Lauren Santos',
+    scheduled: null,
+    views: 40210,
+    tags: ['tech', 'disruption'],
+    createdAt: '2025-10-20T07:45:00Z',
+    updatedAt: '2025-10-28T12:05:00Z',
+  },
+  {
+    id: 'n-003',
+    headline: 'Experts weigh in on sports analytics',
+    status: 'draft',
+    categoryId: 'cat-sports',
+    author: 'Marcus Hale',
+    scheduled: '2025-11-12T13:00:00Z',
+    views: 9800,
+    tags: ['sports', 'analytics'],
+    createdAt: '2025-11-01T09:15:00Z',
+    updatedAt: '2025-11-05T09:15:00Z',
+  },
+  {
+    id: 'n-004',
+    headline: 'New data reveals global markets trends',
+    status: 'published',
+    categoryId: 'cat-politics',
+    author: 'Priya Sen',
+    scheduled: null,
+    views: 31890,
+    tags: ['markets', 'economy'],
+    createdAt: '2025-10-23T06:20:00Z',
+    updatedAt: '2025-10-27T11:45:00Z',
+  },
+  {
+    id: 'n-005',
+    headline: 'Inside the rise of tech disruption',
+    status: 'draft',
+    categoryId: 'cat-tech',
+    author: 'Editorial Desk',
+    scheduled: null,
+    views: 0,
+    tags: ['tech', 'analysis'],
+    createdAt: '2025-11-06T14:00:00Z',
+    updatedAt: '2025-11-06T14:00:00Z',
+  },
+]
+
+export const initialUsers = [
+  {
+    id: 'u-001',
+    name: 'Ava Martin',
+    email: 'ava.martin@dailypulse.com',
+    role: 'Admin',
+    status: 'Active',
+    lastLogin: '2025-11-06T19:42:00Z',
+  },
+  {
+    id: 'u-002',
+    name: 'Marcus Hale',
+    email: 'marcus.hale@dailypulse.com',
+    role: 'Journalist',
+    status: 'Active',
+    lastLogin: '2025-11-05T08:15:00Z',
+  },
+  {
+    id: 'u-003',
+    name: 'Priya Sen',
+    email: 'priya.sen@dailypulse.com',
+    role: 'Journalist',
+    status: 'Invited',
+    lastLogin: null,
+  },
+  {
+    id: 'u-004',
+    name: 'Noah Rivera',
+    email: 'noah.rivera@dailypulse.com',
+    role: 'Editor',
+    status: 'Active',
+    lastLogin: '2025-10-30T16:22:00Z',
+  },
+]
+
+export const statSummary = [
+  {
+    id: 'stat-articles',
+    label: 'Total Articles',
+    value: '248',
+    trend: '+12 vs last month',
+  },
+  {
+    id: 'stat-categories',
+    label: 'Categories',
+    value: '12',
+    trend: 'Stable',
+  },
+  {
+    id: 'stat-views',
+    label: 'Monthly Views',
+    value: '1.2M',
+    trend: '+8% vs last week',
+  },
+  {
+    id: 'stat-subscribers',
+    label: 'Newsletter Signups',
+    value: '3,482',
+    trend: '+214 new',
+  },
+]
+
